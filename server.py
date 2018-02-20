@@ -2,10 +2,24 @@ from flask import Flask, jsonify, render_template, url_for, redirect, request, s
 import requests
 import bcrypt
 import data_manager
+import os
+import psycopg2
+import urllib
 
 app = Flask(__name__)
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+
+
+urllib.parse.uses_netloc.append('postgres')
+url = urllib.parse.urlparse(os.environ.get('DATABASE_URL'))
+connection = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+)
 
 
 def hash_password(plain_text_password):
