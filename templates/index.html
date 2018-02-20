@@ -1,0 +1,139 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <h1>Star Wars Universe Planets</h1>
+        {% if previous_page %}
+        <a href="{{ url_for('index', page=page|int - 1) }}">
+            <button type="button" class="btn btn-primary">Grievous</button>
+        </a>
+        {% else %}
+            <button type="button" class="btn btn-primary disabled">Grievous</button>
+        {% endif %}
+        {% if next_page %}
+        <a href="{{ url_for('index', page=page|int + 1) }}">
+            <button type="button" class="btn btn-primary">Next</button>
+        </a>
+        {% else %}
+            <button type="button" class="btn btn-primary disabled">Next</button>
+        {% endif %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Diameter</th>
+                    <th>Climate</th>
+                    <th>Terrain</th>
+                    <th>Surface Water<br>Percentage</th>
+                    <th>Population</th>
+                    <th>Residents</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for planet in planets %}
+                <tr>
+                    <td>
+                        {{ planet['name'] }}
+                    </td>
+                    <td>
+                        {{ planet['diameter'] }} km
+                    </td>
+                    <td>
+                        {{ planet['climate'] }}
+                    </td>
+                    <td>
+                        {{ planet['terrain'] }}
+                    </td>
+                    <td>
+                        {{ planet['surface_water'] }}{% if planet['surface_water'] != 'unknown' %}%{% endif %}
+                    </td>
+                    <td>
+                        {{ planet['population'] }}{%  if planet['population'] != 'unknown' %} people{% endif %}
+                    </td>
+                    <td>
+                        {% if planet['residents'] %}
+                        <button type="button" class="btn" data-toggle="modal"
+                                data-target="#residentModal" data-planetname="{{ planet['name'] }}" data-whatever="{{ planet['url'] }}">
+                            {{ planet['residents']|length }} resident(s)
+                        </button>
+                        {% else %}
+                            No known residents
+                        {% endif %}
+                    </td>
+                    {% if session['username'] %}
+                    <td>
+                        <button type="button" class="btn vote-button" data-planet_name="{{ planet['name'] }}" data-username="{{ session['username'] }}">Vote</button>
+                    </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="residentModal" tabindex="-1" role="dialog" aria-labelledby="residentModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="residentModalLabel"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div style="overflow: auto">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Height</th>
+                            <th>Mass</th>
+                            <th>Hair color</th>
+                            <th>Skin color</th>
+                            <th>Eye color</th>
+                            <th>Birth year</th>
+                            <th>Gender</th>
+                        </tr>
+                    </thead>
+                    <tbody class="residents"></tbody>
+                </table>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="voteModal" tabindex="-1" role="dialog" aria-labelledby="voteModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="voteModalLabel">Voting statistics</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div style="overflow: auto">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Planet Name</th>
+                            <th>Received votes</th>
+                        </tr>
+                    </thead>
+                    <tbody class="planetVoteTable"></tbody>
+                </table>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

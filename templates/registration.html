@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+{% block content %}
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-5 col-md-3 difficulty">
+            <div class="form-login">
+            <h4>Welcome!</h4>
+            <form action="{{ url_for('register') }}" method="post">
+            <input type="text" pattern=".{5,}" id="user_name" name="user_name" class="form-control input-sm chat-input" placeholder="username" />
+            <br>
+            <input type="password" pattern=".{6,}" id="user_password" name="user_password" class="form-control input-sm chat-input" placeholder="password" />
+            <br>
+            <input type="password" pattern=".{6,}" id="user_password_again" name="user_password_again" class="form-control input-sm chat-input" placeholder="password again" />
+            <br>
+            <div class="wrapper">
+            <span class="group-btn">
+                <input type="submit" value="register" class="btn btn-primary btn-md">
+            </span>
+            </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% if taken_name %}
+    <script>
+        alert("This username is in use. Please choose another!")
+    </script>
+{% endif %}
+<script>
+    let password = document.getElementById("user_password"),
+        confirm_password = document.getElementById("user_password_again");
+
+    function validatePassword(){
+      if(password.value != confirm_password.value) {
+        confirm_password.setCustomValidity("Passwords Don't Match");
+      } else {
+        confirm_password.setCustomValidity('');
+      }
+    }
+    password.onchange = validatePassword;
+    confirm_password.onkeyup = validatePassword;
+</script>
+{% endblock %}

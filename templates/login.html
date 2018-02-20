@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block content %}
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-5 col-md-3 difficulty">
+            <div class="form-login">
+                <form action="{{ url_for('login') }}" method="post">
+                    <h4>Welcome back.</h4>
+                    <input type="text" id="username" name="username" class="form-control input-sm chat-input" placeholder="username" />
+                    <br>
+                    <input type="password" id="user_password" name="user_password" class="form-control input-sm chat-input" placeholder="password" />
+                    <br>
+                    <div class="wrapper">
+                    <span class="group-btn">
+                        <input type="submit" value="login" class="btn btn-primary btn-md">
+                        <a href="{{ url_for('register') }}" class="btn btn-default btn-md">register</a>
+                    </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% if wrong  %}
+<script>
+    alert("Wrong username or password")
+</script>
+{% endif %}
+{% endblock %}
